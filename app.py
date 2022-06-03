@@ -1,6 +1,6 @@
 import cv2
 import pandas as pd
-from PIL import Image
+from PIL import Image, ImageOps
 import streamlit as st
 from streamlit_drawable_canvas import st_canvas
 import numpy as np
@@ -12,9 +12,9 @@ def get_points_from_canvas(objects, radius, color="blue"):
     objects.rename(columns={'left': 'x', 'top': 'y', 'fill': 'color'}, inplace=True)
 
     points = objects[objects.color.isin([color])]
-    points.x = points.x.subtract(radius)
+    points.x = points.x.add(radius)
     points.x = points.x.astype(int)
-    # st.dataframe(points)
+    st.dataframe(points)
 
     return [(points.x[i], points.y[i]) for i in points.index]
 
@@ -40,7 +40,11 @@ with st.expander("Set Gunnar-Farneback algorithm parameters"):
 # Create a canvas component
 if im1:
     im1 = Image.open(im1)
+    original_w, original_h = im1.size
+    st.text((original_w, original_h))
+    im1.thumbnail((600, 600), Image.ANTIALIAS)
     w, h = im1.size
+    st.text((w, h))
     canvas_result = st_canvas(
         # fill_color="rgba(0, 0, 0, 1)",  # Fixed fill color with some opacity
         fill_color=color,
@@ -68,7 +72,10 @@ if im1:
                 points_result_radius = st.slider("Points radius: ", 1, 5, 3)
 
             im2 = Image.open(im2)
-            im1, im2 = np.array(im1), np.array(im2)
+            im2.thumbnail((600, 600), Image.ANTIALIAS)
+            im1_gray, im2_gray = ImageOps.grayscale(im1), ImageOps.grayscale(im2)
+            im1, im2, im1_gray, im2_gray = np.array(im1), np.array(im2), np.array(im1_gray), np.array(im2_gray)
+            im1_gray, im2_gray = im1_gray.transpose(), im2_gray.transpose()
             points = get_points_from_canvas(objects, point_display_radius)
 
             config = optical_flow.Config(flow=None,
@@ -79,9 +86,13 @@ if im1:
                                          poly_n=poly_n,
                                          poly_sigma=poly_sigma,
                                          flags=flags)
-            result_points = optical_flow.opticalFlowFewPoints(points, im1, im2, config)
+            result_points = optical_flow.opticalFlowFewPoints(points, im1_gray, im2_gray, config)
 
-            image = cv2.cvtColor(im2, cv2.COLOR_GRAY2RGB)
+            if len(im2.shape) > 2:
+                image = cv2.cvtColor(im2, cv2.COLOR_RGBA2RGB)
+            else:
+                image = cv2.cvtColor(im2, cv2.COLOR_GRAY2RGB)
+
             for x,y in points:
                 image = cv2.circle(image, (x, y), radius=points_result_radius, color=(0, 0, 255), thickness=-1)
             for x,y in result_points:
@@ -92,7 +103,8 @@ if im1:
                                             color=(0, 255, 0), thickness=arrows_thickness, tipLength=0.33)
 
             st.image(image)
-
+            image = cv2.resize(image, (original_w, original_h), interpolation=cv2.INTER_CUBIC)
+            image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
             _, image = cv2.imencode(".jpg", image)
             byte_im = image.tobytes()
             st.download_button(
