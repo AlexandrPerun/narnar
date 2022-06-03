@@ -14,7 +14,7 @@ def get_points_from_canvas(objects, radius, color="blue"):
     points = objects[objects.color.isin([color])]
     points.x = points.x.add(radius)
     points.x = points.x.astype(int)
-    st.dataframe(points)
+    # st.dataframe(points)
 
     return [(points.x[i], points.y[i]) for i in points.index]
 
@@ -45,10 +45,8 @@ with st.expander("Set Gunnar-Farneback algorithm parameters"):
 if im1:
     im1 = Image.open(im1)
     original_w, original_h = im1.size
-    st.text((original_w, original_h))
     im1.thumbnail((600, 600), Image.ANTIALIAS)
     w, h = im1.size
-    st.text((w, h))
     canvas_result = st_canvas(
         # fill_color="rgba(0, 0, 0, 1)",  # Fixed fill color with some opacity
         fill_color=color,
