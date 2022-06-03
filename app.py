@@ -20,6 +20,10 @@ def get_points_from_canvas(objects, radius, color="blue"):
 
 
 st.set_page_config(layout="wide", page_title="narnar")
+drawing_mode = st.sidebar.selectbox(
+    "Drawing mode:", ("drawing", "editing")
+)
+drawing_mode = 'point' if drawing_mode == "drawing" else "transform"
 # color = st.sidebar.selectbox("Color:", ("blue", "red"))
 color = "blue"
 point_display_radius = st.sidebar.slider("Point display radius: ", 1, 5, 3)
@@ -55,7 +59,7 @@ if im1:
         update_streamlit=realtime_update,
         height=h,
         width=w,
-        drawing_mode="point",
+        drawing_mode=drawing_mode,
         point_display_radius=point_display_radius,
         key="canvas",
     )
