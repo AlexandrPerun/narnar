@@ -2,7 +2,7 @@ import cv2
 import numpy
 import numpy as np
 import torch
-import imageio
+# import imageio
 # import matplotlib.pyplot as plt
 
 
@@ -27,23 +27,23 @@ class Config:
     self.flags = flags
     self.flow = flow
 
-def read_gray2rgb(file1, file2):
-  with open(file1, "rb") as f:
-    im1 = imageio.imread(f)
-  with open(file2, "rb") as f:
-    im2 = imageio.imread(f)
+# def read_gray2rgb(file1, file2):
+#   with open(file1, "rb") as f:
+#     im1 = imageio.imread(f)
+#   with open(file2, "rb") as f:
+#     im2 = imageio.imread(f)
+#
+#   im1rgb = cv2.cvtColor(im1,cv2.COLOR_GRAY2RGB)
+#   im2rgb = cv2.cvtColor(im2,cv2.COLOR_GRAY2RGB)
+#
+#   return im1rgb, im2rgb
 
-  im1rgb = cv2.cvtColor(im1,cv2.COLOR_GRAY2RGB)
-  im2rgb = cv2.cvtColor(im2,cv2.COLOR_GRAY2RGB)
-
-  return im1rgb, im2rgb
-
-def read_gray(file1, file2):
-  with open(file1, "rb") as f:
-    im1 = imageio.imread(f)
-  with open(file2, "rb") as f:
-    im2 = imageio.imread(f)
-  return im1, im2
+# def read_gray(file1, file2):
+#   with open(file1, "rb") as f:
+#     im1 = imageio.imread(f)
+#   with open(file2, "rb") as f:
+#     im2 = imageio.imread(f)
+#   return im1, im2
 
 def opticalFlowFewPoints(points, im1, im2, config):
   flow = cv2.calcOpticalFlowFarneback(
@@ -82,18 +82,18 @@ def xy_to_x_y(points):
   return x, y
 
 
-if __name__ == '__main__':
-  config = Config(None, 0.5, 3, 3, 1, 7, 1.5, flags=10)
-  points = [(551, 369), (588, 456)]
-
-  firstim = '24.png'
-  secondim = '26.png'
-  im1rgb, im2rgb = read_gray2rgb(firstim, secondim)
-  im1, im2 = read_gray(firstim, secondim)
-  points = opticalFlowFewPoints(points, im1, im2, config)
-
-  print(points)
-
-  x, y = xy_to_x_y(points)
-
-  print(x, y)
+# if __name__ == '__main__':
+#   config = Config(None, 0.5, 3, 3, 1, 7, 1.5, flags=10)
+#   points = [(551, 369), (588, 456)]
+#
+#   firstim = '24.png'
+#   secondim = '26.png'
+#   im1rgb, im2rgb = read_gray2rgb(firstim, secondim)
+#   im1, im2 = read_gray(firstim, secondim)
+#   points = opticalFlowFewPoints(points, im1, im2, config)
+#
+#   print(points)
+#
+#   x, y = xy_to_x_y(points)
+#
+#   print(x, y)

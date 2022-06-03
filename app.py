@@ -71,7 +71,14 @@ if im1:
             im1, im2 = np.array(im1), np.array(im2)
             points = get_points_from_canvas(objects, point_display_radius)
 
-            config = optical_flow.Config(None, 0.5, 3, 3, 1, 7, 1.5, flags=10)
+            config = optical_flow.Config(flow=None,
+                                         pyr_scale=pyr_scale,
+                                         levels=levels,
+                                         winsize=winsize,
+                                         iterations=iteration,
+                                         poly_n=poly_n,
+                                         poly_sigma=poly_sigma,
+                                         flags=flags)
             result_points = optical_flow.opticalFlowFewPoints(points, im1, im2, config)
 
             image = cv2.cvtColor(im2, cv2.COLOR_GRAY2RGB)
