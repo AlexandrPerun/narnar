@@ -1,0 +1,18 @@
+cookie:
+  expiry_days: 0
+  key: $2b$12$83Ci1khDYSUJpiIjWW/4LOBpzPoCtRdO4ova76WHbKeL2paboo/gq
+  name: narnar_auth_cookie
+credentials:
+  usernames:
+    alex:
+      email: sania.perun@gmail.com
+      name: Alex Perun
+      password: $2b$12$yk3dBZeU/.zh84jBDSKg8OMvNUmi0mWmdNwsjlGNhz9ezfJfqcdqW
+
+    narnar_admin:
+      email: ''
+      name: narnar admin
+      password: $2b$12$BgdSSFlb03Xz5eRb3thM2eyONAkR/hr8lajkV5AgdVf4Z/HcmREkK
+preauthorized:
+  emails:
+  - sania.perun@gmail.com

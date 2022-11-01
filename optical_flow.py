@@ -61,9 +61,12 @@ def opticalFlowFewPoints(points, im1, im2, config):
 
   out_points = []
   for x, y in points:
-    out = flow[x, y]
-    out_x = x + out[0]
-    out_y = y + out[1]
+    # out = flow[x, y]
+    out = flow[y, x]
+    # out_x = x + out[0]
+    # out_y = y + out[1]
+    out_x = x + out[1]
+    out_y = y + out[0]
     out_points.append((int(out_x), int(out_y)))
 
   return out_points
